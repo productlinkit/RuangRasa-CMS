@@ -38,6 +38,8 @@ pnpm build
 pnpm preview
 ```
 
+When deployed to a static host such as Vercel (no Node API), the client detects the non-JSON `/api` response and switches to an in-browser demo API (`src/services/demoBackend.ts`) that uses the same demo login and seed data, stored in that browser's localStorage. `vercel.json` rewrites page URLs to `index.html` so direct links work.
+
 `VITE_API_BASE_URL` defaults to `/api`. Copy `.env.example` to `.env.local` if you need to override it; Vite proxies `/api` to the local backend during development.
 
 ## Quality checks

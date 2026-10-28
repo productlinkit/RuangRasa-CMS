@@ -54,4 +54,23 @@ describe("simulated auth service", () => {
   ])("rejects %s", async (_scenario, payload) => {
     expect(await signInWithMfa(payload)).toMatchObject({ ok: false });
   });
+
+  it("falls back to the in-browser demo API when /api returns HTML", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: false,
+        status: 404,
+        json: async () => JSON.parse("The page could not be found"),
+      })),
+    );
+
+    expect(
+      await signInWithMfa({
+        email: "nama@ruangrasa.id",
+        password: "ruangrasa",
+        mfaCode: "123456",
+      }),
+    ).toEqual({ ok: true, message: "Login berhasil." });
+  });
 });

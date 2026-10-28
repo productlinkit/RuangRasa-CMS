@@ -1,4 +1,5 @@
 import type { AuditEntry, UserData } from "../types";
+import { demoRequest, type DemoResponse } from "./demoBackend";
 
 export type AuthPayload = {
   email: string;
@@ -12,6 +13,7 @@ export type AuthResult = {
 };
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "/api";
+let demoBackendActive = false;
 
 class ApiError extends Error {
   constructor(
@@ -27,6 +29,8 @@ async function request<Value>(
   path: string,
   init?: RequestInit,
 ): Promise<Value> {
+  if (demoBackendActive) return toResult<Value>(demoRequest(path, init));
+
   let response: Response;
   try {
     response = await fetch(`${apiBaseUrl}${path}`, {
@@ -48,8 +52,23 @@ async function request<Value>(
 
   if (response.status === 204) return undefined as Value;
 
-  const body: unknown = await response.json();
-  if (!response.ok) {
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    // Static hosts (e.g. Vercel) answer /api with an HTML page; switch to the
+    // in-browser demo API for the rest of this page load.
+    console.warn("API did not return JSON; using the in-browser demo API.");
+    demoBackendActive = true;
+    return toResult<Value>(demoRequest(path, init));
+  }
+
+  return toResult<Value>({ status: response.status, body });
+}
+
+function toResult<Value>({ status, body }: DemoResponse): Value {
+  if (status === 204) return undefined as Value;
+  if (status < 200 || status >= 300) {
     const message =
       typeof body === "object" &&
       body !== null &&
@@ -61,8 +80,8 @@ async function request<Value>(
             "message" in body &&
             typeof body.message === "string"
           ? body.message
-          : `API request failed with status ${response.status}.`;
-    throw new ApiError(message, response.status);
+          : `API request failed with status ${status}.`;
+    throw new ApiError(message, status);
   }
 
   return body as Value;
