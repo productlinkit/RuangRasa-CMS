@@ -800,6 +800,14 @@ const messages = {
     ID: "Kode contoh: 123456",
     EN: "Sample code: 123456",
   },
+  "pages.LoginPage.showPassword": {
+    ID: "Tampilkan kata sandi",
+    EN: "Show password",
+  },
+  "pages.LoginPage.hidePassword": {
+    ID: "Sembunyikan kata sandi",
+    EN: "Hide password",
+  },
   "pages.NotificationsPage.001": {
     ID: [
       ["templates", "Template ke user"],

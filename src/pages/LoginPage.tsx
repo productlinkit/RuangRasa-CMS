@@ -27,6 +27,7 @@ export function AdminLogin({
   const [step, setStep] = useState<"credentials" | "verify">("credentials");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [countdown, setCountdown] = useState(30);
   const [codeError, setCodeError] = useState("");
@@ -154,13 +155,29 @@ export function AdminLogin({
                   <div className="input-wrap">
                     <Icon>lock</Icon>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
                       placeholder="••••••••••"
                       autoComplete="current-password"
                       required
                     />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword((value) => !value)}
+                      aria-label={message(
+                        language,
+                        showPassword
+                          ? "pages.LoginPage.hidePassword"
+                          : "pages.LoginPage.showPassword",
+                      )}
+                      aria-pressed={showPassword}
+                    >
+                      <Icon>
+                        {showPassword ? "visibility_off" : "visibility"}
+                      </Icon>
+                    </button>
                   </div>
                 </label>
                 <Button kind="primary">

@@ -84,6 +84,22 @@ describe("AdminLogin", () => {
     ).toBeInTheDocument();
   });
 
+  it("toggles password visibility", async () => {
+    const user = userEvent.setup();
+    render(<LoginHarness />);
+    const input = screen.getByPlaceholderText("••••••••••");
+
+    expect(input).toHaveAttribute("type", "password");
+    await user.click(
+      screen.getByRole("button", { name: "Tampilkan kata sandi" }),
+    );
+    expect(input).toHaveAttribute("type", "text");
+    await user.click(
+      screen.getByRole("button", { name: "Sembunyikan kata sandi" }),
+    );
+    expect(input).toHaveAttribute("type", "password");
+  });
+
   it("rejects an incorrect MFA code", async () => {
     const user = userEvent.setup();
 

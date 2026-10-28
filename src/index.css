@@ -170,6 +170,27 @@ button {
   color: var(--caption);
   opacity: 0.7;
 }
+.password-toggle {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: -6px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--caption);
+  cursor: pointer;
+}
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  color: var(--amber);
+}
+.password-toggle:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 1px;
+}
 .field-heading {
   display: flex;
   align-items: center;
