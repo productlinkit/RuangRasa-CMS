@@ -1,0 +1,10 @@
+{
+  "description": "Manage RuangRasa's AI storytelling product with a user-friendly admin panel, ensuring a warm, cohesive experience for users and administrators alike.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
